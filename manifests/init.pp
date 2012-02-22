@@ -32,8 +32,6 @@
 # }
 #
 class lvm () {
-  include motd
-  motd::register{'lvm': }
 
   class { 'lvm::params': }
   class { 'lvm::install': }
