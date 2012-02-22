@@ -6,8 +6,22 @@ define lvm::lv ( $ensure = present, $vg, $size = undef, fstype = "ext4" ) {
   case $ensure {
     present: {
       exec { "Create LVM device /dev/${vg}/${name}":
-        command => "lvcreate -L ${size} --name ${name} ${vg} && mkfs -t ${fstype} /dev/${vg}/${name}",
+        command => "lvcreate -L ${size} --name ${name} ${vg}",
         unless  => "test -e /dev/${vg}/${name}",
+      }
+      if $fstype == 'swap' {
+        exec { "Format LVM device /dev/${vg}/${name} as Swap":
+        command => "mkswap /dev/${vg}/${name}",
+        unless  => "test -e /dev/${vg}/${name}",
+        require => Exec["Create LVM device /dev/${vg}/${name}"],
+        }
+      }
+      else {
+        exec { "Formating LVM device /dev/${vg}/${name}":
+        command => "mkfs -t ${fstype} /dev/${vg}/${name}",
+        unless  => "test -e /dev/${vg}/${name}",
+        require => Exec["Create LVM device /dev/${vg}/${name}"],
+        }
       }
 
     }
