@@ -20,5 +20,6 @@
       vg     => "vg0",
       fstype => "swap",
       require => Lvm::VG["vg0"],
-  }}
-
+   }
+}
+##
