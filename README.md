@@ -1,27 +1,24 @@
 ## Sample Usage
 
     node node01 {
-      include lvm
-      lvm::lv {
-        "device1":
-          ensure => present,
-          size   => "10G",
-          vg     => "vgStorage";
-        "device2":
-          ensure => absent,
-          vg     => "vgStorage";
-        "device3":
-          ensure => extend,
-          size   => "10G",
-          vg     => "vgStorage";
-        "device4":
-          ensure => reduce,
-          size   => "10G",
-          vg     => "vgStorage";
-      }
+    include lvm
+    lvm::vg {"vg0":
+      ensure  => present,
+      pv    => "/dev/sda4"
     }
 
+    lvm::lv {"host-disk":
+      ensure => present,
+      size   => "100G",
+      vg     => "vg0",
+      fstype => "ext4",
+      require => Lvm::VG["vg0"],
+    }
+    lvm::lv { "host-swap":
+      ensure => present,
+      size   => "1G",
+      vg     => "vg0",
+      fstype => "swap",
+      require => Lvm::VG["vg0"],
+  }}
 
-## Todo
-
-- Physical volume support.

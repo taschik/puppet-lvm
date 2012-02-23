@@ -10,7 +10,6 @@ define lvm::lv ( $ensure = present, $vg, $size = undef, fstype = "ext4" ) {
           unless  => "test -e /dev/${vg}/${name}",
         }
     }
-
     extend: {
       exec { "Extend LVM device /dev/${vg}/${name}":
         command => "lvextend -L +${size} /dev/${vg}/${name}",
