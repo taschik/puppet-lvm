@@ -1,6 +1,6 @@
 ## Sample Usage
 
-    node node01 {
+  node node01 {
     include lvm
     lvm::vg {"vg0":
       ensure  => present,
@@ -20,6 +20,6 @@
       vg     => "vg0",
       fstype => "swap",
       require => Lvm::VG["vg0"],
-   }
-}
-##
+    }
+  }
+## TODO
